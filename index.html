@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
   <title>눈대중 MeatSnap – 고기 무게 판정</title>
   <meta name="description" content="사진 한 장으로 고기 양을 판정해드립니다. 눈대중 MeatSnap과 함께 현명한 고기 주문!" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -44,11 +44,12 @@
       align-items: flex-start;
       min-height: 100vh;
       padding: 0 0 40px;
+      margin: 0;
     }
 
     #root {
       width: 100%;
-      max-width: 390px;
+      max-width: 480px;
       min-height: 100vh;
       background: var(--bg);
       position: relative;
@@ -432,30 +433,64 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== RESULT CARD ===== */
+    /* ===== 모달 오버레이 ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      animation: fade-in 0.25s ease;
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ===== RESULT CARD (모달 내부) ===== */
     .result-card {
-      border-radius: var(--radius);
-      padding: 24px 20px;
+      width: 100%;
+      max-width: 100%;
+      border-radius: 24px 24px 0 0;
+      padding: 28px 20px 48px;
       animation: slide-up 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       position: relative;
       overflow: hidden;
       border: 1.5px solid;
+      border-bottom: none;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-sizing: border-box;
     }
     @keyframes slide-up {
-      from { opacity: 0; transform: translateY(30px) scale(0.95); }
-      to   { opacity: 1; transform: translateY(0) scale(1); }
+      from { opacity: 0; transform: translateY(100%); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-    .result-card.red    { background: var(--red-bg);    border-color: var(--red);    }
-    .result-card.yellow { background: var(--yellow-bg); border-color: var(--yellow); }
-    .result-card.green  { background: var(--green-bg);  border-color: var(--green);  }
+
+    /* 색상별 배경 — 더 진하고 선명하게 */
+    .result-card.red    { background: linear-gradient(160deg, #2a0a0a 0%, #1a1a1a 100%); border-color: var(--red); }
+    .result-card.yellow { background: linear-gradient(160deg, #2a1f00 0%, #1a1a1a 100%); border-color: var(--yellow); }
+    .result-card.green  { background: linear-gradient(160deg, #0a2a10 0%, #1a1a1a 100%); border-color: var(--green); }
+
+    /* 모달 핸들 바 */
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 99px;
+      margin: 0 auto 20px;
+    }
 
     .result-glow {
       position: absolute;
-      top: -60px; right: -60px;
-      width: 180px; height: 180px;
+      top: -40px; right: -40px;
+      width: 220px; height: 220px;
       border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.25;
+      filter: blur(50px);
+      opacity: 0.4;
     }
     .result-card.red    .result-glow { background: var(--red); }
     .result-card.yellow .result-glow { background: var(--yellow); }
@@ -491,11 +526,11 @@
     .result-card.green  .result-verdict { color: var(--green); }
 
     .result-main {
-      font-size: 28px;
+      font-size: 36px;
       font-weight: 900;
-      color: var(--text);
-      letter-spacing: -0.5px;
+      letter-spacing: -1px;
       line-height: 1.1;
+      text-shadow: 0 0 20px currentColor;
     }
     .result-card.red    .result-main { color: var(--red); }
     .result-card.yellow .result-main { color: var(--yellow); }
@@ -512,10 +547,10 @@
     }
     .meta-chip {
       flex: 1;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 10px;
+      padding: 12px 8px;
       text-align: center;
     }
     .meta-chip-label {
@@ -527,21 +562,22 @@
       margin-bottom: 4px;
     }
     .meta-chip-value {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
     }
 
     .result-desc {
       margin-top: 14px;
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      background: rgba(255,255,255,0.04);
-      border-radius: 8px;
-      padding: 12px;
+      font-size: 14px;
+      color: #ccc;
+      line-height: 1.7;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 14px;
     }
-    .result-desc strong { color: var(--text); }
+    .result-desc strong { color: #fff; }
 
     .confidence-bar-wrap {
       margin-top: 14px;
@@ -636,7 +672,39 @@
       opacity: 0.5;
     }
 
-    /* ===== SCROLLBAR ===== */
+
+    /* ===== 반응형 ===== */
+    @media (max-width: 390px) {
+      .scroll-body { padding: 14px 12px; gap: 12px; }
+      .card { padding: 14px; }
+      .species-emoji { font-size: 22px; }
+      .species-name { font-size: 12px; }
+      .btn-emoji { font-size: 15px; }
+      .btn-label { font-size: 11px; }
+      .result-main { font-size: 30px; }
+      .result-emoji { font-size: 44px; }
+      .cta-btn { padding: 15px; font-size: 15px; }
+      .header { padding: 20px 16px 14px; }
+      .logo-text span:last-child { font-size: 19px; }
+    }
+
+    @media (min-width: 391px) and (max-width: 480px) {
+      .scroll-body { padding: 18px 16px; }
+      .result-main { font-size: 34px; }
+    }
+
+    @media (min-width: 481px) {
+      #root { border-radius: 0; }
+      .result-card { max-width: 480px; margin: 0 auto; border-radius: 24px 24px 0 0; }
+    }
+
+    /* safe area (아이폰 노치 대응) */
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+      .result-card { padding-bottom: calc(40px + env(safe-area-inset-bottom)); }
+      .cta-btn { margin-bottom: env(safe-area-inset-bottom); }
+    }
+
+        /* ===== SCROLLBAR ===== */
     ::-webkit-scrollbar { width: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
@@ -998,9 +1066,11 @@ function App() {
           </span>
         </button>
 
-        {/* 판정 결과 */}
+        {/* 판정 결과 모달 */}
         {result && (
+          <div className="modal-overlay" onClick={(e) => { if(e.target.className === 'modal-overlay') reset(); }}>
           <div className={`result-card ${result.key}`}>
+            <div className="modal-handle" />
             <div className="result-glow" />
             <div className="result-header">
               <div className="result-emoji">{result.emoji}</div>
@@ -1051,6 +1121,7 @@ function App() {
             <button id="retry-btn" className="retry-btn" onClick={reset}>
               🔄 처음부터 다시하기
             </button>
+          </div>
           </div>
         )}
 

@@ -25,6 +25,19 @@
   font-display: block;
 }
 </style>
+<script>
+(function() {
+  var style = document.createElement('style');
+  style.textContent = 'body { opacity: 0; }';
+  document.head.appendChild(style);
+  document.fonts.ready.then(function() {
+    style.textContent = 'body { opacity: 1; transition: opacity 0.2s; }';
+  });
+  setTimeout(function() {
+    style.textContent = 'body { opacity: 1; transition: opacity 0.2s; }';
+  }, 1500);
+})();
+</script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

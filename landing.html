@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>눈대중 MeatSnap — 고기집 감시 앱</title>
+<meta name="description" content="당신의 다운로드 하나가 전국 고기집을 바꿉니다. 정확도보다 감시 문화, 눈대중 MeatSnap."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0d0d0d;
+  --dark: #151515;
+  --surface: #1e1e1e;
+  --orange: #FF6B35;
+  --orange2: #ff8c55;
+  --red: #e74c3c;
+  --white: #f5f0eb;
+  --muted: #888;
+  --border: rgba(255,255,255,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Noto Sans KR', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 24px 80px;
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,107,53,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,107,53,0.12);
+  border: 1px solid rgba(255,107,53,0.3);
+  border-radius: 99px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  animation: fade-up 0.6s ease both;
+}
+
+.hero-title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(42px, 10vw, 80px);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+  animation: fade-up 0.6s 0.1s ease both;
+}
+
+.hero-title span {
+  color: var(--orange);
+  position: relative;
+}
+
+.hero-title span::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: var(--orange);
+  border-radius: 2px;
+  animation: expand 0.8s 0.8s ease both;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+@keyframes expand {
+  to { transform: scaleX(1); }
+}
+
+.hero-sub {
+  font-size: clamp(16px, 4vw, 22px);
+  color: var(--muted);
+  margin-bottom: 48px;
+  line-height: 1.6;
+  max-width: 500px;
+  animation: fade-up 0.6s 0.2s ease both;
+}
+
+.hero-sub strong { color: var(--white); }
+
+.hero-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fade-up 0.6s 0.3s ease both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 16px 36px;
+  border-radius: 99px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 0 40px rgba(255,107,53,0.35);
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 60px rgba(255,107,53,0.5);
+}
+
+.btn-hint {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── BLACKBOX SECTION ── */
+.blackbox {
+  padding: 100px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(28px, 6vw, 52px);
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.section-title em {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.section-desc {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto 60px;
+}
+
+.section-desc strong { color: var(--white); }
+
+/* ── FLOW ── */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 500px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.flow-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 0;
+  position: relative;
+}
+
+.flow-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 23px;
+  top: 56px;
+  width: 2px;
+  height: calc(100% - 36px);
+  background: linear-gradient(to bottom, var(--orange), transparent);
+}
+
+.flow-dot {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,107,53,0.12);
+  border: 2px solid var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.flow-text {
+  padding-top: 8px;
+}
+
+.flow-text strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+
+.flow-text span {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── STATS ── */
+.stats-section {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 80px 24px;
+}
+
+.stats-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.stat-box {
+  padding: 28px 16px;
+  background: var(--dark);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.stat-num {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(28px, 5vw, 44px);
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* ── MANIFESTO ── */
+.manifesto {
+  padding: 100px 24px;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.manifesto-quote {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(22px, 5vw, 38px);
+  line-height: 1.4;
+  margin-bottom: 40px;
+  position: relative;
+  padding: 0 20px;
+}
+
+.manifesto-quote::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 0;
+  font-size: 80px;
+  color: var(--orange);
+  opacity: 0.3;
+  line-height: 1;
+}
+
+.manifesto-quote em {
+  font-style: normal;
+  color: var(--orange);
+}
+
+.manifesto-sub {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* ── HOW IT WORKS ── */
+.how {
+  padding: 100px 24px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+}
+
+.how-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 48px;
+}
+
+.how-card {
+  background: var(--dark);
+  border-radius: 16px;
+  padding: 28px 20px;
+  border: 1px solid var(--border);
+  text-align: left;
+  transition: border-color 0.2s;
+}
+
+.how-card:hover { border-color: var(--orange); }
+
+.how-num {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: 40px;
+  color: rgba(255,107,53,0.2);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.how-card h3 {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+
+.how-card p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer-section {
+  padding: 60px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.disclaimer-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+/* ── FINAL CTA ── */
+.final-cta {
+  padding: 100px 24px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.final-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,107,53,0.1) 0%, transparent 70%);
+}
+
+.final-cta h2 {
+  font-family: 'Black Han Sans', sans-serif;
+  font-size: clamp(28px, 6vw, 52px);
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.final-cta p {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.final-cta .btn-primary { position: relative; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 32px 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+.hero-bg-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+/* ── HOOK BANNER ── */
+.hook-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  padding: 10px 16px;
+  background: rgba(13,13,13,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,107,53,0.2);
+}
+
+.hook-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--orange);
+}
+
+/* ── MEAT VISUAL ── */
+.meat-visual {
+  margin-bottom: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: fade-up 0.6s ease both;
+}
+
+.meat-label {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+/* ── WEBTOON ── */
+.webtoon-section {
+  padding: 100px 24px;
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.webtoon-img {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 60px rgba(255,107,53,0.1);
+  margin-top: 40px;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 480px) {
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .stats-grid .stat-box:last-child { grid-column: 1 / -1; }
+  .hook-banner { padding: 8px 12px; }
+  .hook-tag { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  
+  <!-- 배경 감시 카메라 -->
+  <svg class="hero-bg-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+    <!-- 감시 카메라 -->
+    <g opacity="0.06" transform="translate(80,60)">
+      <rect x="0" y="20" width="120" height="70" rx="12" fill="#FF6B35"/>
+      <rect x="120" y="30" width="40" height="50" rx="6" fill="#FF6B35"/>
+      <circle cx="60" cy="55" r="25" fill="none" stroke="#FF6B35" stroke-width="8"/>
+      <circle cx="60" cy="55" r="12" fill="#FF6B35"/>
+      <rect x="-20" y="38" width="25" height="10" rx="5" fill="#FF6B35"/>
+      <line x1="60" y1="90" x2="60" y2="130" stroke="#FF6B35" stroke-width="6"/>
+      <rect x="30" y="128" width="60" height="10" rx="5" fill="#FF6B35"/>
+    </g>
+    <!-- 눈 아이콘 -->
+    <g opacity="0.05" transform="translate(400,40)">
+      <ellipse cx="80" cy="50" rx="75" ry="40" fill="none" stroke="#FF6B35" stroke-width="8"/>
+      <circle cx="80" cy="50" r="22" fill="#FF6B35"/>
+      <circle cx="80" cy="50" r="10" fill="#0d0d0d"/>
+      <circle cx="88" cy="44" r="4" fill="#FF6B35" opacity="0.8"/>
+    </g>
+    <!-- 저울 -->
+    <g opacity="0.05" transform="translate(460,320)">
+      <rect x="57" y="0" width="6" height="140" rx="3" fill="#FF6B35"/>
+      <line x1="20" y1="40" x2="100" y2="40" stroke="#FF6B35" stroke-width="6" stroke-linecap="round"/>
+      <line x1="25" y1="40" x2="10" y2="90" stroke="#FF6B35" stroke-width="5" stroke-linecap="round"/>
+      <line x1="95" y1="40" x2="110" y2="70" stroke="#FF6B35" stroke-width="5" stroke-linecap="round"/>
+      <ellipse cx="10" cy="97" rx="28" ry="10" fill="#FF6B35"/>
+      <ellipse cx="110" cy="77" rx="28" ry="10" fill="#FF6B35"/>
+    </g>
+    <!-- 위성 신호 -->
+    <g opacity="0.04" transform="translate(20,300)">
+      <path d="M40,80 Q40,20 100,20" fill="none" stroke="#FF6B35" stroke-width="5" stroke-linecap="round"/>
+      <path d="M40,80 Q40,0 130,0" fill="none" stroke="#FF6B35" stroke-width="4" stroke-linecap="round"/>
+      <path d="M40,80 Q40,-20 160,-20" fill="none" stroke="#FF6B35" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="40" cy="80" r="10" fill="#FF6B35"/>
+    </g>
+  </svg>
+  <!-- 후크 배너 -->
+  <div class="hook-banner">
+    <span class="hook-tag">🚨 대국민 식당 자정 프로젝트</span>
+  </div>
+
+  <!-- 고기 이미지 -->
+  <div class="meat-visual">
+    <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" width="280">
+      <!-- 접시 -->
+      <ellipse cx="160" cy="140" rx="145" ry="28" fill="#1a1a1a" opacity="0.6"/>
+      <ellipse cx="160" cy="132" rx="148" ry="30" fill="#2a2a2a"/>
+      <ellipse cx="160" cy="128" rx="140" ry="26" fill="#333"/>
+      <!-- 삼겹살 레이어 3 (살코기) -->
+      <path d="M60,115 Q80,90 120,88 Q160,86 200,90 Q240,94 260,110 Q250,128 200,132 Q160,135 120,132 Q80,129 60,115Z" fill="#c0392b"/>
+      <!-- 지방층 -->
+      <path d="M62,108 Q82,95 122,93 Q162,91 202,95 Q238,99 258,108 Q240,100 200,97 Q160,94 120,97 Q82,100 62,108Z" fill="#fdf2e9" opacity="0.9"/>
+      <!-- 살코기 2 -->
+      <path d="M64,100 Q84,86 124,84 Q164,82 204,86 Q240,90 256,100 Q238,93 200,90 Q160,87 120,90 Q84,93 64,100Z" fill="#e74c3c"/>
+      <!-- 지방층 2 -->
+      <path d="M66,93 Q86,82 126,80 Q166,78 206,82 Q240,86 254,93 Q238,87 200,84 Q160,81 120,84 Q86,87 66,93Z" fill="#fdf2e9" opacity="0.85"/>
+      <!-- 살코기 1 (최상단) -->
+      <path d="M68,86 Q90,72 130,70 Q168,68 208,72 Q242,76 252,86 Q234,80 196,77 Q158,74 120,77 Q88,80 68,86Z" fill="#c0392b"/>
+      <!-- 마블링 -->
+      <ellipse cx="130" cy="78" rx="18" ry="5" fill="#e8c9a0" opacity="0.4" transform="rotate(-5,130,78)"/>
+      <ellipse cx="190" cy="82" rx="14" ry="4" fill="#e8c9a0" opacity="0.35" transform="rotate(3,190,82)"/>
+      <ellipse cx="155" cy="95" rx="20" ry="4" fill="#e8c9a0" opacity="0.3"/>
+      <!-- 물음표 오버레이 -->
+      <g transform="translate(220,50)">
+        <circle cx="30" cy="30" r="28" fill="#FF6B35" opacity="0.9"/>
+        <text x="30" y="42" text-anchor="middle" font-family="Black Han Sans, sans-serif" font-size="32" fill="#fff">?</text>
+      </g>
+      <!-- 저울 아이콘 (기울어짐) -->
+      <g transform="translate(20,40)" opacity="0.7">
+        <rect x="27" y="0" width="5" height="55" rx="2" fill="#FF6B35"/>
+        <line x1="5" y1="18" x2="55" y2="28" stroke="#FF6B35" stroke-width="4" stroke-linecap="round"/>
+        <line x1="8" y1="18" x2="0" y2="45" stroke="#FF6B35" stroke-width="3" stroke-linecap="round"/>
+        <line x1="52" y1="28" x2="58" y2="50" stroke="#FF6B35" stroke-width="3" stroke-linecap="round"/>
+        <ellipse cx="0" cy="49" rx="14" ry="5" fill="#FF6B35"/>
+        <ellipse cx="58" cy="54" rx="14" ry="5" fill="#FF6B35"/>
+      </g>
+    </svg>
+    <div class="meat-label">주문한 고기, 제대로 나왔을까요?</div>
+  </div>
+
+  <div class="hero-badge">🥩 소비자 감시 앱</div>
+  <h1 class="hero-title">고기집이<br/><span>정량</span>을 지키게<br/>만드는 앱</h1>
+  <p class="hero-sub">
+    정확하지 않아도 괜찮아요.<br/>
+    <strong>당신의 다운로드 하나</strong>가 전국 고기집을 바꿉니다.
+  </p>
+  <div class="hero-cta">
+    <a href="https://profound-hotteok-dc6ca2.netlify.app" class="btn-primary">
+      📱 지금 바로 사용하기
+    </a>
+    <span class="btn-hint">무료 · 앱 설치 불필요</span>
+  </div>
+</section>
+
+<!-- BLACKBOX -->
+<section class="blackbox" style="position:relative;overflow:hidden;">
+  <!-- 블랙박스 카메라 배경 -->
+  <svg class="section-bg-svg" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;max-width:900px;opacity:0.04;pointer-events:none;">
+    <!-- 블랙박스 -->
+    <g transform="translate(80,100)">
+      <rect x="0" y="0" width="180" height="110" rx="16" fill="#FF6B35"/>
+      <rect x="15" y="15" width="150" height="80" rx="8" fill="#0d0d0d"/>
+      <circle cx="90" cy="55" r="30" fill="none" stroke="#FF6B35" stroke-width="8"/>
+      <circle cx="90" cy="55" r="15" fill="#FF6B35" opacity="0.6"/>
+      <circle cx="90" cy="55" r="6" fill="#0d0d0d"/>
+      <rect x="70" y="-20" width="40" height="22" rx="6" fill="#FF6B35"/>
+    </g>
+    <!-- 신호선 -->
+    <g transform="translate(280,130)">
+      <path d="M0,40 C60,-20 120,-20 180,40" fill="none" stroke="#FF6B35" stroke-width="4" stroke-dasharray="10,8"/>
+      <path d="M0,40 C60,0 120,0 180,40" fill="none" stroke="#FF6B35" stroke-width="3" stroke-dasharray="8,6" opacity="0.6"/>
+    </g>
+    <!-- 스마트폰 -->
+    <g transform="translate(480,60)">
+      <rect x="0" y="0" width="100" height="180" rx="16" fill="#FF6B35" opacity="0.8"/>
+      <rect x="8" y="16" width="84" height="148" rx="10" fill="#0d0d0d"/>
+      <circle cx="50" cy="170" r="8" fill="#FF6B35" opacity="0.5"/>
+      <!-- 카메라 뷰파인더 -->
+      <rect x="16" y="24" width="68" height="60" rx="6" fill="#FF6B35" opacity="0.15"/>
+      <rect x="16" y="24" width="68" height="60" rx="6" fill="none" stroke="#FF6B35" stroke-width="2" opacity="0.5"/>
+      <circle cx="50" cy="54" r="16" fill="none" stroke="#FF6B35" stroke-width="3" opacity="0.6"/>
+      <line x1="16" y1="54" x2="34" y2="54" stroke="#FF6B35" stroke-width="2" opacity="0.5"/>
+      <line x1="66" y1="54" x2="84" y2="54" stroke="#FF6B35" stroke-width="2" opacity="0.5"/>
+      <line x1="50" y1="24" x2="50" y2="38" stroke="#FF6B35" stroke-width="2" opacity="0.5"/>
+      <line x1="50" y1="70" x2="50" y2="84" stroke="#FF6B35" stroke-width="2" opacity="0.5"/>
+    </g>
+    <!-- 데이터 -->
+    <g transform="translate(620,140)" opacity="0.7">
+      <rect x="0" y="0" width="120" height="16" rx="8" fill="#FF6B35" opacity="0.4"/>
+      <rect x="0" y="26" width="90" height="16" rx="8" fill="#FF6B35" opacity="0.3"/>
+      <rect x="0" y="52" width="110" height="16" rx="8" fill="#FF6B35" opacity="0.35"/>
+      <rect x="0" y="78" width="70" height="16" rx="8" fill="#FF6B35" opacity="0.25"/>
+    </g>
+  </svg>
+  <div class="section-label reveal">핵심 원리</div>
+  <h2 class="section-title reveal">블랙박스와 <em>똑같아요</em></h2>
+  <p class="section-desc reveal">
+    블랙박스가 모든 사고를 잡는 건 아니에요.<br/>
+    하지만 <strong>블랙박스 달린 차가 많아지자 난폭운전이 줄었어요.</strong><br/>
+    눈대중 MeatSnap도 같은 원리입니다.
+  </p>
+
+  <div class="flow reveal">
+    <div class="flow-item">
+      <div class="flow-dot">📱</div>
+      <div class="flow-text">
+        <strong>다운로드 수가 늘어난다</strong>
+        <span>더 많은 소비자가 고기집에서 사진을 찍기 시작한다</span>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">👀</div>
+      <div class="flow-text">
+        <strong>식당 사장님들이 인식한다</strong>
+        <span>"요즘 손님들이 고기 사진을 찍더라"</span>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">⚖️</div>
+      <div class="flow-text">
+        <strong>자연스럽게 정량을 지키게 된다</strong>
+        <span>법으로 강제하지 않아도 시장이 스스로 바뀐다</span>
+      </div>
+    </div>
+    <div class="flow-item">
+      <div class="flow-dot">🎉</div>
+      <div class="flow-text">
+        <strong>소비자가 이긴다</strong>
+        <span>앱 하나가 외식 문화를 바꾼다</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section" style="position:relative;overflow:hidden;">
+  <svg style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:1000px;height:100%;opacity:0.04;pointer-events:none;" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- 바 차트 배경 -->
+    <rect x="100" y="200" width="60" height="80" rx="6" fill="#FF6B35"/>
+    <rect x="200" y="160" width="60" height="120" rx="6" fill="#FF6B35"/>
+    <rect x="300" y="100" width="60" height="180" rx="6" fill="#FF6B35"/>
+    <rect x="400" y="60" width="60" height="220" rx="6" fill="#FF6B35"/>
+    <rect x="500" y="30" width="60" height="250" rx="6" fill="#FF6B35"/>
+    <rect x="600" y="10" width="60" height="270" rx="6" fill="#FF6B35"/>
+    <rect x="700" y="5" width="60" height="275" rx="6" fill="#FF6B35"/>
+    <rect x="800" y="2" width="60" height="278" rx="6" fill="#FF6B35"/>
+    <!-- 상승 화살표 -->
+    <path d="M150,190 L280,150 L380,90 L480,50 L600,20" fill="none" stroke="#FF6B35" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <polygon points="600,5 615,25 585,25" fill="#FF6B35"/>
+  </svg>
+  <div class="stats-inner">
+    <div class="section-label reveal">왜 지금인가</div>
+    <h2 class="section-title reveal">고기집 <em>양 속임</em>,<br/>오래된 문제예요</h2>
+    <div class="stats-grid">
+      <div class="stat-box reveal">
+        <div class="stat-num">4인분</div>
+        <div class="stat-label">주문해도 2인분×2가<br/>아닌 경우가 많다</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num">저울</div>
+        <div class="stat-label">테이블에서 무게를<br/>직접 잴 방법이 없다</div>
+      </div>
+      <div class="stat-box reveal">
+        <div class="stat-num">지금</div>
+        <div class="stat-label">소비자가 직접<br/>감시할 수 있는 시대</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFESTO -->
+<section class="manifesto" style="position:relative;overflow:hidden;">
+  <svg style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:800px;height:100%;opacity:0.03;pointer-events:none;" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+    <text x="50" y="280" font-family="serif" font-size="500" fill="#FF6B35" opacity="1">"</text>
+  </svg>
+  <p class="section-label reveal">우리의 목표</p>
+  <div class="manifesto-quote reveal">
+    정확도보다 <em>감시 문화</em>가<br/>더 중요합니다
+  </div>
+  <p class="manifesto-sub reveal">
+    AI 판정이 100% 맞지 않아도 괜찮아요.<br/>
+    수십만 명이 고기집에서 사진을 찍는다는 사실 자체가<br/>
+    <strong style="color:var(--white)">식당들을 바꿉니다.</strong><br/><br/>
+    당신의 다운로드 하나가 그 문화의 일부가 됩니다.
+  </p>
+</section>
+
+<!-- WEBTOON -->
+<section class="webtoon-section">
+  <div class="section-label reveal">실제 이야기</div>
+  <h2 class="section-title reveal">이런 일이 <em>매일</em> 일어납니다</h2>
+  <img
+    class="webtoon-img reveal"
+    src="webtoon.png"
+    alt="눈대중 MeatSnap 웹툰 — 고깃집에서 400g 주문했는데 적음 판정 후 식당이 바뀌는 5컷 스토리"
+  />
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="how-inner">
+    <div class="section-label reveal">사용 방법</div>
+    <h2 class="section-title reveal">딱 <em>30초</em>면 돼요</h2>
+    <div class="how-grid">
+      <div class="how-card reveal">
+        <div class="how-num">01</div>
+        <h3>📷 실시간 촬영</h3>
+        <p>고기가 나오면 접시 전체가 보이도록 사진을 찍어요</p>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">02</div>
+        <h3>🥩 부위·무게 선택</h3>
+        <p>주문한 부위와 무게를 선택해요</p>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">03</div>
+        <h3>🤖 AI 판정</h3>
+        <p>🔴 적음 / 🟡 보통 / 🟢 많음 결과가 나와요</p>
+      </div>
+      <div class="how-card reveal">
+        <div class="how-num">04</div>
+        <h3>📢 신고 접수</h3>
+        <p>결과를 DB에 저장해 전국 식당 데이터를 쌓아요</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCLAIMER -->
+<section class="disclaimer-section">
+  <div class="disclaimer-box reveal">
+    ⚠️ 본 앱의 판정 결과는 AI 추정값이며 조명·각도·두께에 따라 오차가 발생할 수 있습니다.
+    판정 결과는 <strong style="color:var(--white)">참고용</strong>으로만 활용하시고 법적 효력이 없습니다.
+    허위 신고 시 법적 책임이 따를 수 있습니다.
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2>지금 다운로드할수록<br/><span style="color:var(--orange)">고기집이 바뀝니다</span></h2>
+  <p>무료 · 회원가입 불필요 · 지금 바로 사용 가능</p>
+  <a href="https://profound-hotteok-dc6ca2.netlify.app" class="btn-primary">
+    🥩 눈대중 MeatSnap 시작하기
+  </a>
+</section>
+
+<footer>
+  © 2026 눈대중 MeatSnap · AI 고기 무게 판정 · 소비자 권익 보호 플랫폼
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

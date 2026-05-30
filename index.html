@@ -1900,9 +1900,15 @@ function App() {
       {activeTab === 'rankings' && (
         <div className="ranking-wrap">
           <div className="ranking-header">
-            <div className="ranking-title">📊 식당별 기록 현황</div>
+            <div className="ranking-title">📊 지역별 기록 현황</div>
             <button className="refresh-btn" onClick={fetchRankings}>🔄 새로고침</button>
           </div>
+          {!rankLoading && rankings.length > 0 && (
+            <div style={{fontSize:'11px', color:'var(--text-muted)', padding:'8px 12px', background:'var(--surface2)', borderRadius:'10px', marginBottom:'10px', lineHeight:'1.6'}}>
+              🔒 업소명은 익명 처리되며, 동일 코드(#XXXX)는 동일 업소입니다.<br/>
+              3건 이상 기록된 업소만 표시됩니다. 인증 참여 업소는 실명 공개됩니다.
+            </div>
+          )}
 
           {rankLoading && <div className="ranking-loading">데이터 불러오는 중...</div>}
 
@@ -1914,32 +1920,38 @@ function App() {
           )}
 
           {!rankLoading && rankings.map((r, i) => (
-            <div key={i} className={`restaurant-card${r.red_count >= 3 ? ' danger' : ''}`}>
+            <div key={i} className={`restaurant-card${r.warning_level === 'HIGH' ? ' danger' : ''}`}>
               <div className="restaurant-top">
                 <div>
-                  <div className="restaurant-name">{r.restaurant_name}</div>
-                  {r.restaurant_address && (
-                    <div className="restaurant-address">📍 {r.restaurant_address}</div>
-                  )}
+                  {/* 자발적 인증 식당은 실명, 일반은 해시코드+지역+업종 */}
+                  {r.display_name
+                    ? <div className="restaurant-name">✅ {r.display_name}</div>
+                    : <div className="restaurant-name" style={{letterSpacing:'0.5px'}}>
+                        📍 {r.region} &nbsp;
+                        <span style={{color:'var(--orange)', fontFamily:'monospace', fontSize:'12px'}}>#{r.hash_code}</span>
+                      </div>
+                  }
+                  <div className="restaurant-address" style={{marginTop:'3px'}}>
+                    🥩 {r.species_label}{r.cut ? ` · ${r.cut}` : ''}
+                    &nbsp;·&nbsp; 총 {r.total}건 기록
+                  </div>
                 </div>
-                {r.red_count >= 3
-                  ? <div className="danger-badge">⚠️ 주의 식당</div>
-                  : r.green_count >= 3
-                  ? <div className="safe-badge">✅ 양 많은 집</div>
-                  : null
-                }
+                <div style={{textAlign:'right', flexShrink:0}}>
+                  <div className={r.warning_level === 'HIGH' ? 'danger-badge' : r.warning_level === 'MID' ? 'danger-badge' : 'safe-badge'}>
+                    {r.warning_emoji} {r.warning_level === 'HIGH' ? '주의' : r.warning_level === 'MID' ? '관심' : '양호'}
+                  </div>
+                </div>
               </div>
-              {(r.species || r.cut) && (
-                <div style={{fontSize:'12px', color:'var(--text-muted)', marginBottom:'8px'}}>
-                  🥩 {r.species}{r.cut ? ` · ${r.cut}` : ''}
-                </div>
-              )}
-              <div className="restaurant-stats">
-                <div className="stat-chip"><span>{r.total}회</span> 기록</div>
+              <div className="restaurant-stats" style={{marginTop:'10px'}}>
                 <div className="stat-chip red-chip">🔴 적음 <span>{r.red_count}</span></div>
                 <div className="stat-chip" style={{borderColor:'var(--yellow)'}}>🟡 보통 <span style={{color:'var(--yellow)'}}>{r.yellow_count}</span></div>
                 <div className="stat-chip green-chip">🟢 많음 <span>{r.green_count}</span></div>
               </div>
+              {!r.display_name && (
+                <div style={{marginTop:'8px', fontSize:'11px', color:'var(--text-muted)', opacity:0.6}}>
+                  ※ 소비자 보호를 위해 업소명은 익명 처리됩니다. 동일 코드는 동일 업소입니다.
+                </div>
+              )}
             </div>
           ))}
         </div>

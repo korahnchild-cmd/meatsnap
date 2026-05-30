@@ -307,6 +307,53 @@
     .btn-label { display: block; line-height: 1.2; }
     .btn-sub { display: block; font-size: 10px; font-weight: 400; color: inherit; opacity: 0.65; margin-top: 2px; }
 
+    /* ===== WEIGHT SLIDER ===== */
+    .weight-slider-wrap {
+      margin-top: 14px;
+      background: var(--surface2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+    }
+    .weight-slider-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .weight-slider-label { font-size: 12px; color: var(--text-muted); }
+    .weight-slider-value {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--orange);
+      letter-spacing: -0.5px;
+    }
+    .weight-slider-value.active { text-shadow: 0 0 12px var(--orange-glow); }
+    input[type=range].weight-range {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      border-radius: 99px;
+      background: var(--border);
+      outline: none;
+      cursor: pointer;
+    }
+    input[type=range].weight-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 8px var(--orange-glow);
+      cursor: pointer;
+    }
+    .weight-slider-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+    .weight-slider-ticks span { font-size: 10px; color: var(--text-muted); opacity: 0.6; }
+
     /* ===== SPECIES BUTTONS (1단계) ===== */
     .species-btn {
       flex: 1;
@@ -1179,6 +1226,7 @@ function App() {
   const [species, setSpecies]   = useState(null);  // 'pork' | 'beef'
   const [cut, setCut]           = useState(null);  // 부위 key
   const [weight, setWeight]     = useState(null);
+  const [sliderWeight, setSliderWeight] = useState(200);
   const [loading, setLoading]   = useState(false);
   const [result, setResult]     = useState(null);
   const [dragOver, setDragOver] = useState(false);
@@ -1402,6 +1450,13 @@ function App() {
   React.useEffect(() => {
     if (activeTab === 'rankings') fetchRankings();
   }, [activeTab]);
+
+  React.useEffect(() => {
+    const el = document.querySelector('input.weight-range');
+    if (!el) return;
+    const pct = ((sliderWeight - 50) / (1000 - 50)) * 100;
+    el.style.background = `linear-gradient(to right, var(--orange) ${pct}%, var(--border) ${pct}%)`;
+  }, [sliderWeight]);
 
   
 
@@ -1690,17 +1745,35 @@ function App() {
         {/* 주문 무게 */}
         <div className="card">
           <div className="section-label">⚖️ 주문 무게</div>
-          <div className="btn-group cols-5">
-            {['200g', '300g', '400g', '500g', '600g'].map((w) => (
+          <div className="btn-group cols-6">
+            {['100g', '150g', '200g', '300g', '400g', '500g'].map((w) => (
               <button
                 key={w}
                 id={`weight-${w}`}
                 className={`choice-btn${weight === w ? ' active' : ''}`}
-                onClick={() => setWeight(w)}
+                onClick={() => { setWeight(w); setSliderWeight(parseInt(w)); }}
               >
                 <span className="btn-label">{w}</span>
               </button>
             ))}
+          </div>
+          <div className="weight-slider-wrap">
+            <div className="weight-slider-top">
+              <span className="weight-slider-label">세밀하게 조정</span>
+              <span className={`weight-slider-value${weight && !(['100g','150g','200g','300g','400g','500g'].includes(weight)) ? ' active' : ''}`}>{sliderWeight}g</span>
+            </div>
+            <input
+              type="range"
+              className="weight-range"
+              min="50"
+              max="1000"
+              step="10"
+              value={sliderWeight}
+              onChange={(e) => { const v = parseInt(e.target.value); setSliderWeight(v); setWeight(v + 'g'); }}
+            />
+            <div className="weight-slider-ticks">
+              <span>50g</span><span>250g</span><span>500g</span><span>750g</span><span>1000g</span>
+            </div>
           </div>
         </div>
 

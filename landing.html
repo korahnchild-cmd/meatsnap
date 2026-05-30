@@ -546,7 +546,117 @@ footer {
   margin-top: 40px;
 }
 
-/* ── TOPBAR ── */
+/* ── HOMESCREEN MODAL ── */
+.hs-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.hs-modal-overlay.active {
+  display: flex;
+}
+.hs-modal {
+  background: #1e1e1e;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 28px 28px 0 0;
+  padding: 28px 24px 40px;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  animation: slide-up 0.3s ease;
+}
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+.hs-close {
+  position: absolute;
+  top: 16px; right: 20px;
+  background: rgba(255,255,255,0.08);
+  border: none; border-radius: 50%;
+  width: 32px; height: 32px;
+  color: var(--muted); font-size: 14px;
+  cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+}
+.hs-header { text-align: center; margin-bottom: 28px; }
+.hs-icon { font-size: 40px; margin-bottom: 10px; }
+.hs-header h3 {
+  font-size: 20px; font-weight: 900;
+  color: var(--white); margin-bottom: 6px;
+}
+.hs-header p { font-size: 14px; color: var(--muted); }
+.hs-steps { display: grid; gap: 16px; margin-bottom: 24px; }
+.hs-step {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 14px;
+}
+.hs-step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(255,107,53,0.15);
+  border: 1px solid rgba(255,107,53,0.3);
+  color: var(--orange); font-size: 13px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.hs-step-body strong {
+  display: block; font-size: 14px;
+  font-weight: 800; color: var(--white); margin-bottom: 4px;
+}
+.hs-step-body span { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.hs-badge {
+  display: inline-block;
+  background: rgba(255,107,53,0.12);
+  border: 1px solid rgba(255,107,53,0.25);
+  border-radius: 6px; padding: 1px 7px;
+  color: var(--orange); font-size: 12px; font-weight: 800;
+}
+.hs-cta-btn {
+  display: block; text-align: center;
+  background: var(--orange); color: #fff;
+  font-size: 16px; font-weight: 800;
+  font-family: 'Noto Sans KR', sans-serif;
+  padding: 16px; border-radius: 14px;
+  text-decoration: none; margin-bottom: 12px;
+  box-shadow: 0 8px 24px rgba(255,107,53,0.3);
+}
+.hs-note {
+  text-align: center; font-size: 12px;
+  color: rgba(136,136,136,0.6); line-height: 1.6;
+}
+.hs-note strong { color: var(--muted); }
+
+/* iOS 홈화면 버튼 스타일 */
+.store-dl-homescreen {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: var(--white) !important;
+  border: 1px solid rgba(255,107,53,0.4) !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 20px rgba(255,107,53,0.15);
+}
+.store-dl-homescreen:hover { transform: translateY(-2px); }
+.store-dl-homescreen::after {
+  content: 'iOS 전용';
+  background: var(--orange) !important;
+}
+.topbar-btn-homescreen {
+  background: rgba(255,107,53,0.12) !important;
+  color: var(--orange) !important;
+  border: 1px solid rgba(255,107,53,0.3) !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* ── HOMESCREEN MODAL ── */
 .topbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -1497,6 +1607,90 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ── iOS 감지 & 버튼 교체 ── */
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+if (isIOS) {
+  // App Store 버튼 → 홈화면 추가 버튼으로 교체
+  document.querySelectorAll('.store-dl-ios').forEach(btn => {
+    btn.classList.remove('store-dl-ios');
+    btn.classList.add('store-dl-homescreen');
+    btn.removeAttribute('title');
+    btn.href = '#';
+    btn.querySelector('.store-dl-meta small').textContent = '무료 · 지금 바로';
+    btn.querySelector('.store-dl-meta strong').textContent = '홈화면에 추가';
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      openHomescreenModal();
+    });
+  });
+
+  // Topbar iOS 버튼도 교체
+  document.querySelectorAll('.topbar-btn-ios').forEach(btn => {
+    btn.classList.remove('topbar-btn-ios');
+    btn.classList.add('topbar-btn-homescreen');
+    btn.removeAttribute('title');
+    btn.href = '#';
+    btn.querySelector('.store-btn-meta small').textContent = '무료';
+    btn.querySelector('.store-btn-meta strong').textContent = '홈화면 추가';
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      openHomescreenModal();
+    });
+  });
+}
+
+function openHomescreenModal() {
+  document.getElementById('homescreen-modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeHomescreenModal() {
+  document.getElementById('homescreen-modal').classList.remove('active');
+  document.body.style.overflow = '';
+}
 </script>
+
+<!-- iOS 홈화면 추가 모달 -->
+<div id="homescreen-modal" class="hs-modal-overlay" onclick="if(event.target===this)closeHomescreenModal()">
+  <div class="hs-modal">
+    <button class="hs-close" onclick="closeHomescreenModal()">✕</button>
+    <div class="hs-header">
+      <div class="hs-icon">📱</div>
+      <h3>홈화면에 추가하기</h3>
+      <p>앱처럼 바로 사용할 수 있어요</p>
+    </div>
+
+    <div id="hs-safari-guide">
+      <div class="hs-steps">
+        <div class="hs-step">
+          <div class="hs-step-num">1</div>
+          <div class="hs-step-body">
+            <strong>하단 공유 버튼 탭</strong>
+            <span>Safari 하단 가운데 <span class="hs-badge">⬆ 공유</span> 아이콘을 탭하세요</span>
+          </div>
+        </div>
+        <div class="hs-step">
+          <div class="hs-step-num">2</div>
+          <div class="hs-step-body">
+            <strong>홈 화면에 추가 선택</strong>
+            <span>스크롤을 내려 <span class="hs-badge">홈 화면에 추가</span>를 탭하세요</span>
+          </div>
+        </div>
+        <div class="hs-step">
+          <div class="hs-step-num">3</div>
+          <div class="hs-step-body">
+            <strong>추가 완료</strong>
+            <span>오른쪽 상단 <span class="hs-badge">추가</span>를 탭하면 홈화면에 아이콘이 생겨요</span>
+          </div>
+        </div>
+      </div>
+      <a href="https://meatsnap.vercel.app" class="hs-cta-btn">🥩 지금 Safari로 열기</a>
+      <p class="hs-note">※ Chrome이 아닌 <strong>Safari</strong>에서만 홈화면 추가가 가능합니다</p>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

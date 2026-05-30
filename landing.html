@@ -717,10 +717,10 @@ footer {
 }
 .topbar-btn-ios {
   background: rgba(255,255,255,0.08);
-  color: var(--muted);
-  border: 1px solid var(--border);
-  cursor: not-allowed;
-  opacity: 0.6;
+  color: var(--white);
+  border: 1px solid rgba(255,107,53,0.4);
+  cursor: pointer;
+  opacity: 1;
 }
 .topbar-btn-web {
   background: rgba(255,255,255,.06);
@@ -744,7 +744,7 @@ footer {
   font-weight: 900;
 }
 .topbar-btn:hover { transform: translateY(-1px); }
-.topbar-btn-ios:hover { transform: none; }
+.topbar-btn-ios:hover { transform: translateY(-1px); border-color: var(--orange); }
 
 /* ── HERO LAYOUT (2컬럼) ── */
 .hero-grid {
@@ -919,12 +919,13 @@ footer {
 .store-dl-play:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,0.4); }
 .store-dl-ios {
   background: rgba(255,255,255,0.07);
-  color: var(--muted);
-  border: 1px solid var(--border);
-  cursor: not-allowed;
-  opacity: 0.55;
+  color: var(--white);
+  border: 1px solid rgba(255,107,53,0.4);
+  cursor: pointer;
+  opacity: 1;
   position: relative;
 }
+.store-dl-ios:hover { transform: translateY(-2px); border-color: rgba(255,107,53,0.6); }
 .store-dl-ios::after {
   content: 'iOS 출시 예정';
   position: absolute;
@@ -1145,7 +1146,7 @@ details.faq-item p strong { color: var(--white); }
     </div>
     <span class="topbar-copy">고기집에서 사진 한 장, 지금 바로 시작하세요</span>
     <div class="topbar-btns">
-      <a href="https://meatsnap.vercel.app" class="topbar-btn topbar-btn-ios" aria-label="App Store">
+      <a href="#" class="topbar-btn topbar-btn-ios" aria-label="App Store" onclick="openHomescreenModal();return false;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
         <span class="store-btn-meta"><small>Coming soon</small><strong>App Store</strong></span>
       </a>
@@ -1207,7 +1208,7 @@ details.faq-item p strong { color: var(--white); }
       </p>
       <div class="hero-cta">
         <div class="store-btns">
-          <a href="https://meatsnap.vercel.app" class="store-dl-btn store-dl-ios" title="App Store — iOS 출시 예정">
+          <a href="#" class="store-dl-btn store-dl-ios" onclick="openHomescreenModal();return false;" title="홈화면에 추가하여 앱처럼 사용">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
             <span class="store-dl-meta"><small>Coming soon</small><strong>App Store</strong></span>
           </a>
@@ -1217,6 +1218,9 @@ details.faq-item p strong { color: var(--white); }
           </a>
         </div>
         <span class="btn-hint">무료 · iOS 출시 예정 · Android 지원</span>
+        <a href="#" class="ios-guide-link" onclick="openHomescreenModal();return false;">
+          🍎 아이폰 사용자 → 홈화면에 추가해서 사용하기
+        </a>
       </div>
     </div>
 
@@ -1580,7 +1584,7 @@ details.faq-item p strong { color: var(--white); }
   <h2>지금 다운로드할수록<br/><span style="color:var(--orange)">고기집이 바뀝니다</span></h2>
   <p>무료 · 회원가입 불필요 · iOS & Android 지원</p>
   <div class="store-btns" style="justify-content:center;">
-    <a href="https://meatsnap.vercel.app" class="store-dl-btn store-dl-ios" title="App Store — iOS 출시 예정">
+    <a href="#" class="store-dl-btn store-dl-ios" onclick="openHomescreenModal();return false;" title="홈화면에 추가하여 앱처럼 사용">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
       <span class="store-dl-meta"><small>Coming soon</small><strong>App Store</strong></span>
     </a>
@@ -1590,6 +1594,9 @@ details.faq-item p strong { color: var(--white); }
     </a>
   </div>
   <span class="btn-hint" style="display:block;margin-top:14px;">iOS 출시 예정 · 지금은 웹에서도 바로 사용 가능</span>
+  <a href="#" class="ios-guide-link" style="margin-top:12px;" onclick="openHomescreenModal();return false;">
+    🍎 아이폰 사용자 → 홈화면에 추가해서 사용하기
+  </a>
 </section>
 
 <footer>
@@ -1608,39 +1615,9 @@ const observer = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-/* ── iOS 감지 & 버튼 교체 ── */
+/* ── iOS 감지 (Safari 여부 모달 안내용) ── */
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
-if (isIOS) {
-  // App Store 버튼 → 홈화면 추가 버튼으로 교체
-  document.querySelectorAll('.store-dl-ios').forEach(btn => {
-    btn.classList.remove('store-dl-ios');
-    btn.classList.add('store-dl-homescreen');
-    btn.removeAttribute('title');
-    btn.href = '#';
-    btn.querySelector('.store-dl-meta small').textContent = '무료 · 지금 바로';
-    btn.querySelector('.store-dl-meta strong').textContent = '홈화면에 추가';
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      openHomescreenModal();
-    });
-  });
-
-  // Topbar iOS 버튼도 교체
-  document.querySelectorAll('.topbar-btn-ios').forEach(btn => {
-    btn.classList.remove('topbar-btn-ios');
-    btn.classList.add('topbar-btn-homescreen');
-    btn.removeAttribute('title');
-    btn.href = '#';
-    btn.querySelector('.store-btn-meta small').textContent = '무료';
-    btn.querySelector('.store-btn-meta strong').textContent = '홈화면 추가';
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      openHomescreenModal();
-    });
-  });
-}
 
 function openHomescreenModal() {
   document.getElementById('homescreen-modal').classList.add('active');

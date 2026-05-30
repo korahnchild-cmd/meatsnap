@@ -1423,11 +1423,11 @@ function App() {
           ai_comment: result.aiComment || '',
         })
       });
-      if (!res.ok) throw new Error('신고 실패');
+      if (!res.ok) throw new Error('기록 실패');
       setReported(true);
-      showToast('✅ 신고가 접수됐어요!');
+      showToast('✅ 기록이 저장됐어요!');
     } catch(e) {
-      showToast('❌ 신고 중 오류가 발생했어요.');
+      showToast('❌ 기록 중 오류가 발생했어요.');
     } finally {
       setReporting(false);
     }
@@ -1784,9 +1784,9 @@ function App() {
               법적 효력이 없습니다. 조명·각도·두께에 따라 오차가 발생할 수 있습니다.
             </div>
             <div className="report-section">
-              <div className="report-title">📢 이 식당 신고하기</div>
+              <div className="report-title">📢 이 식당 기록하기</div>
               <div style={{fontSize:'11px', color:'var(--red)', marginBottom:'8px', lineHeight:'1.5'}}>
-                ⚠️ 허위·조작 신고는 법적 책임이 따를 수 있습니다
+                ⚠️ 허위·조작 기록은 법적 책임이 따를 수 있습니다
               </div>
               <input
                 className="report-input"
@@ -1807,7 +1807,7 @@ function App() {
                 onClick={submitReport}
                 disabled={reported || reporting}
               >
-                {reported ? '✅ 신고 완료!' : reporting ? '신고 중...' : '🚨 신고 접수하기'}
+                {reported ? '✅ 기록 완료!' : reporting ? '기록 중...' : '🚨 기록 남기기'}
               </button>
             </div>
 
@@ -1827,7 +1827,7 @@ function App() {
       {activeTab === 'rankings' && (
         <div className="ranking-wrap">
           <div className="ranking-header">
-            <div className="ranking-title">📊 식당별 신고 현황</div>
+            <div className="ranking-title">📊 식당별 기록 현황</div>
             <button className="refresh-btn" onClick={fetchRankings}>🔄 새로고침</button>
           </div>
 
@@ -1835,8 +1835,8 @@ function App() {
 
           {!rankLoading && rankings.length === 0 && (
             <div className="ranking-empty">
-              아직 신고된 식당이 없어요 🥩<br/>
-              판정 후 식당을 신고하면<br/>여기에 쌓이기 시작해요!
+              아직 기록된 식당이 없어요 🥩<br/>
+              판정 후 식당을 기록하면<br/>여기에 쌓이기 시작해요!
             </div>
           )}
 
